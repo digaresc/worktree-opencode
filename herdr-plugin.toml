@@ -1,10 +1,24 @@
 id = "local.worktree-opencode"
 name = "Worktree + OpenCode"
-version = "0.1.0"
+version = "0.2.0"
 min_herdr_version = "0.9.0"
 description = "Start OpenCode automatically in every newly created worktree workspace."
 platforms = ["linux", "macos"]
 
+# Any worktree creation (Herdr's prefix+shift+g dialog, the `wt` alias, or an
+# agent running `herdr worktree create`) starts OpenCode in the new pane.
 [[events]]
 on = "worktree.created"
 command = ["bash", "bootstrap.sh"]
+
+# Optional keybinding action: create a worktree from the branch name currently
+# selected in the focused pane. Bind it in ~/.config/herdr/config.toml with:
+#   [[keys.command]]
+#   key = "prefix+shift+a"
+#   type = "plugin_action"
+#   command = "local.worktree-opencode.spawn"
+[[actions]]
+id = "spawn"
+title = "New worktree from selected text"
+contexts = ["workspace"]
+command = ["bash", "spawn.sh"]
