@@ -25,4 +25,16 @@ if [ -z "$branch" ]; then
     exit 0
 fi
 
+# Refuse a branch that is already checked out in another worktree.
+if [ -n "$repo" ] && git -C "$repo" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    where="$(git -C "$repo" worktree list --porcelain | awk -v ref="refs/heads/$branch" '
+        /^worktree / { p = substr($0, 10) }
+        /^branch /   { if ($2 == ref) print p }')"
+    if [ -n "$where" ]; then
+        "$herdr" notification show "Branch already checked out" \
+            --body "$branch is open in $where" --sound request >/dev/null 2>&1 || true
+        exit 0
+    fi
+fi
+
 "$herdr" worktree create --cwd "$repo" --branch "$branch" --label "${branch##*/}" --focus
