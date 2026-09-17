@@ -1,0 +1,10 @@
+id = "local.worktree-opencode"
+name = "Worktree + OpenCode"
+version = "0.1.0"
+min_herdr_version = "0.9.0"
+description = "Start OpenCode automatically in every newly created worktree workspace."
+platforms = ["linux", "macos"]
+
+[[events]]
+on = "worktree.created"
+command = ["bash", "bootstrap.sh"]
