@@ -15,7 +15,7 @@ data = d.get("data", {})
 wt = data.get("worktree") or {}
 print(data.get("workspace", {}).get("workspace_id", ""))
 print(wt.get("branch") or "")
-print(wt.get("label") or "")
+print(data.get("workspace", {}).get("label") or wt.get("label") or "")
 ')
 ws="${fields[0]:-}"
 branch="${fields[1]:-}"
